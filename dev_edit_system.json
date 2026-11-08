@@ -1,0 +1,9 @@
+{
+  "version": "4.0.0",
+  "theme": "white-black",
+  "bg": { "tag": "TAG:ALT-BG-WALLPAPER-3840x2160", "size": "3840x2160", "replaceable": true },
+  "grid": { "type": "isometric", "opacity": 0.12 },
+  "sheets": ["01_LOCATIONS","02_CHARACTERS","03_FACTIONS"],
+  "edit": { "fast": true, "hotReload": true, "placeholderCards": true },
+  "exports": ["fandom","wiki","altdb"]
+}

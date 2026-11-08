@@ -1,0 +1,17 @@
+{
+  "entries": [
+    {
+      "id": "ALT-SYS-DEMO-01",
+      "kind": "system",
+      "name": "Demonstration System",
+      "data": {"notes": "Test-only unapproved record"}
+    },
+    {
+      "id": "ALT-PLANET-DEMO-01",
+      "kind": "planet",
+      "name": "Demonstration Planet",
+      "parent_id": "ALT-SYS-DEMO-01",
+      "data": {"classification": "fictional", "coordinate_status": "unknown"}
+    }
+  ]
+}
