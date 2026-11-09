@@ -20,8 +20,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Assemble allowlisted public site only
+        run: |
+          mkdir -p _site
+          cp index.html styles.css config.js _site/
+          cp -R fandom-db wiki-db alt-db scripts assets _site/
+          touch _site/.nojekyll
+          test ! -e _site/runtime
+          test ! -e _site/backend
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
