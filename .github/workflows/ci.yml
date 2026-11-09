@@ -1,0 +1,23 @@
+# BareBones Projects, Designed by: Justin Levesque-Welsch.
+name: Frontend CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/*.test.mjs
+      - name: Check route and asset files
+        run: |
+          for f in index.html fandom-db/index.html wiki-db/index.html alt-db/index.html scripts/portal.js styles.css assets/README.md; do test -f "$f" || exit 1; done
+      - name: Block private files
+        run: |
+          if git ls-files | grep -E '(^|/)(\.env|.*\.sqlite3?|.*\.pem|.*\.key|runtime/)' ; then echo "Sensitive file name detected"; exit 1; fi
