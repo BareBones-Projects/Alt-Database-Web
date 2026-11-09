@@ -1,21 +1,13 @@
-# Security Policy
+# Security policy
 
-## Supported Versions
+BareBones Projects, Designed by: Justin Levesque-Welsch.
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+This is a public **static frontend repository**. Never add private API keys, user credentials, database exports, SQLite files, service-account keys, environment files or upload secrets.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+All browser requests must use HTTPS public read endpoints with credentials omitted. The canonical backend is responsible for private/draft filtering, authorization, anti-abuse controls and database security. Set an exact public CORS allowlist in that backend.
 
-## Reporting a Vulnerability
+GitHub Pages cannot securely accept user uploads. Stage only approved public assets in `assets/` via reviewed commits. For live uploading, use a separate authenticated upload endpoint, validated storage policy and approved object storage. Never place write credentials in web JavaScript.
 
-Use this section to tell people how to report a vulnerability.
+For vulnerabilities, use private GitHub vulnerability reporting if enabled; do not post secrets to public issues.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Canonical backend: [ALT-Database-db](https://github.com/BareBones-Projects/ALT-Database-db).
