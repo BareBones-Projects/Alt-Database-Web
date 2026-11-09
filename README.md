@@ -1,50 +1,38 @@
-# // ALT DATABASE
+![ALT Database Web preview](assets/social-preview.svg)
 
-Canonical SQL lore, navigation records, images and media metadata for BareBones Projects.
+# // ALT DATABASE WEB
 
-## Quick start
+Standalone **public website interface**, with all canonical content from [BareBones-Projects/ALT-Database-db](https://github.com/BareBones-Projects/ALT-Database-db). The website owns no database, credentials, SQL records or private exports.
 
-Python 3.11+; no third-party dependencies.
+**BareBones Projects, Designed by: Justin Levesque-Welsch.**
 
-```bash
-python backend/server.py init
-python backend/server.py create-admin --username admin
-ALT_COOKIE_SECURE=0 python backend/server.py serve --host 127.0.0.1 --port 8090
-python -m unittest discover -s tests -p 'test_*.py' -v
-```
+## Portals
 
-Open http://127.0.0.1:8090/login. **Only set ALT_COOKIE_SECURE=0 on localhost.** Production requires HTTPS, private persistent volumes, rate limiting and security review. To allow browser reads from an explicitly trusted cross-origin map frontend, set `ALT_PUBLIC_ORIGINS=https://your-map-host.example` (comma-separated exact origins); no admin route gets CORS access. Never publish the runtime directory or .sqlite3 files.
+- [Fandom DB](fandom-db/) — `/fandom-db/` — characters, factions and species.
+- [Wiki DB](wiki-db/) — `/wiki-db/` — searchable public reference entries.
+- [ALT DB](alt-db/) — `/alt-db/` — star systems, planets, districts, locations and navigation records.
 
-## Components
+All pages load records from the public read API: `GET /api/v1/entities`. The canonical backend also exposes `/api/v1/media` for approved public media metadata, and `/api/v1/health` for monitoring. The backend owns visibility filtering, authentication and all persistent writes. No sample data is presented as canonical.
 
-- `backend/schema.sql`: SQLite canonical entity records, media, admins, sessions, audit trail and ingest provenance.
-- `backend/server.py`: API and admin-only authenticated record editing.
-- `admin/`: gated dashboard, login and media manager.
-- `tests/`: smoke and schema tests.
-- `docs/INTEGRATIONS.md`: six downstream repositories, endpoint mappings and migration guidance.
-- `.github/workflows/database-ci.yml`: Python CI for PRs.
+## Setup
 
-## Public read API
+1. Run `python3 -m http.server 8080` from this repository and visit `http://localhost:8080/`.
+2. Set `apiBaseUrl` in [config.js](config.js) to the public HTTPS API endpoint of the running **ALT-Database-db service**. Never set this to a GitHub repo URL or SQL URL, and never add secrets.
+3. Enable the deployed web origin in the backend's public-read CORS allowlist.
+4. Run `node --test tests/*.test.mjs` with Node.js 20+.
 
-`GET /api/v1/health`, `/api/v1/entities`, `/api/v1/planets`, `/api/v1/objects/{id}`, `/api/v1/media`, `/api/v1/media/{id}`, `/v1/map/snapshot` and `/v1/objects/{id}`.
+Without a live API URL the three portals remain clearly marked as disconnected, rather than pretending they contain real records.
 
-Only `public` visibility content is exposed. Admin routes use HttpOnly SameSite sessions, PBKDF2 password hashes and an X-CSRF-Token for writes. No registration endpoint exists. Maximum inline media upload is 8 MiB; use object storage for large video and image masters. SQL migrations are reviewed code, not browser uploads.
+## Public deployment
 
-## Branch workflow
+GitHub Pages publishes from `main` with [.github/workflows/pages.yml](.github/workflows/pages.yml). Select **GitHub Actions** under Repository Settings → Pages. The CI workflow runs tests on pull requests and commits. GitHub Pages requires a repository setting and can need organization policy approval. The deployment is not live until the workflow completes successfully.
 
-Make a feature branch from `alpha`, run local tests, open a PR and wait for checks. Keep clients backward-compatible and do not grant them SQL write credentials. This version establishes the hub; Unreal navigation solver, web hex-cell data and bulk CSV ingestion require later compatibility work before full production migration.
+## Assets
 
-MIT license. Copyright (c) 2026 BareBones Projects.
+`assets/images/`, `assets/files/`, and `assets/previews/` are for reviewed static public uploads committed through Git. See [assets/README.md](assets/README.md). **Live browser uploads must use an authenticated backend or object storage.** GitHub Pages cannot securely receive them. Never commit unapproved assets, credentials or the database itself.
 
-## v0.2 canonical synchronization (draft PR #3)
-The next-stage importer supports validated CSV/JSON records with stable IDs, source revision, SHA-256 provenance, collision policies, and atomic draft-only ingestion. The public API adds `/api/v1/changes?since=0` and `/api/v1/hex-cells/{id}/contents`.
+## Security
 
-```bash
-python backend/server.py init
-python scripts/convert_star_map_csv.py path/to/cyclus.csv --output runtime/star-candidates.json
-python backend/import_canon.py runtime/star-candidates.json --db runtime/alt.sqlite3 --source alt-star-map-db --revision batch-1
-# Review the dry-run report before adding --apply
-python backend/import_canon.py runtime/star-candidates.json --db runtime/alt.sqlite3 --source alt-star-map-db --revision batch-1 --apply
-```
+See [SECURITY.md](SECURITY.md). This repo is deliberately separate from the private database. Public clients only access public API endpoints, without credentials.
 
-Imported records are **not published** until approved by an authenticated administrator. Conversion of source coordinates does not imply survey verification. See [canonical sync specification](docs/CANONICAL_SYNC_V0.2.md).
+MIT licensed. © 2026 BareBones Projects.
