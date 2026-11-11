@@ -20,14 +20,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      - name: Assemble allowlisted public site only
+      - name: Assemble allowlisted public website
         run: |
           mkdir -p _site
-          cp index.html styles.css config.js _site/
-          cp -R fandom-db wiki-db alt-db scripts assets _site/
+          cp index.html styles.css _site/
+          cp -R assets _site/
           touch _site/.nojekyll
-          test ! -e _site/runtime
-          test ! -e _site/backend
+          for route in fandom-db wiki-db alt-db backend runtime; do test ! -e "_site/$route"; done
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

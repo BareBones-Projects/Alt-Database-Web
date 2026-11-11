@@ -2,37 +2,36 @@
 
 # // ALT DATABASE WEB
 
-Standalone **public website interface**, with all canonical content from [BareBones-Projects/ALT-Database-db](https://github.com/BareBones-Projects/ALT-Database-db). The website owns no database, credentials, SQL records or private exports.
+Standalone **public website interface** for the ALT Multiverse, separate from the authoritative [BareBones-Projects/ALT-Database-db](https://github.com/BareBones-Projects/ALT-Database-db).
 
 **BareBones Projects, Designed by: Justin Levesque-Welsch.**
 
-## Portals
+## Repository boundaries
 
-- [Fandom DB](fandom-db/) — `/fandom-db/` — characters, factions and species.
-- [Wiki DB](wiki-db/) — `/wiki-db/` — searchable public reference entries.
-- [ALT DB](alt-db/) — `/alt-db/` — star systems, planets, districts, locations and navigation records.
+This project owns the public website shell, styling and approved deployable static assets. It **does not own** database-backed portals, canonical records, upload storage or backend authentication.
 
-All pages load records from the public read API: `GET /api/v1/entities`. The canonical backend also exposes `/api/v1/media` for approved public media metadata, and `/api/v1/health` for monitoring. The backend owns visibility filtering, authentication and all persistent writes. No sample data is presented as canonical.
+The following belong in the **ALT-Database-db** repository, not here:
 
-## Setup
+- `/fandom-db/` — Fandom entities, characters, factions and species.
+- `/wiki-db/` — Encyclopedia and public wiki data.
+- `/alt-db/` — Planetary, navigation, location and canonical ALT data.
 
-1. Run `python3 -m http.server 8080` from this repository and visit `http://localhost:8080/`.
-2. Set `apiBaseUrl` in [config.js](config.js) to the public HTTPS API endpoint of the running **ALT-Database-db service**. Never set this to a GitHub repo URL or SQL URL, and never add secrets.
-3. Enable the deployed web origin in the backend's public-read CORS allowlist.
-4. Run `node --test tests/*.test.mjs` with Node.js 20+.
+Their frontend route files and corresponding portal-only logic have been removed from this website repository. Links are documentation of **ownership**, not deployed routes.
 
-Without a live API URL the three portals remain clearly marked as disconnected, rather than pretending they contain real records.
+## Local development
 
-## Public deployment
+Run `python3 -m http.server 8080` from the repository root, then visit `http://localhost:8080/`. Run `node --test tests/*.test.mjs` with Node 20+.
 
-GitHub Pages publishes from `main` with [.github/workflows/pages.yml](.github/workflows/pages.yml). Select **GitHub Actions** under Repository Settings → Pages. The CI workflow runs tests on pull requests and commits. GitHub Pages requires a repository setting and can need organization policy approval. The deployment is not live until the workflow completes successfully.
+## Deployment
+
+GitHub Pages deploys the allowlisted website shell from `main` through [pages.yml](.github/workflows/pages.yml). Configure repository Settings → Pages → Source: GitHub Actions. CI checks the site structure and enforces separation from the database portals.
 
 ## Assets
 
-`assets/images/`, `assets/files/`, and `assets/previews/` are for reviewed static public uploads committed through Git. See [assets/README.md](assets/README.md). **Live browser uploads must use an authenticated backend or object storage.** GitHub Pages cannot securely receive them. Never commit unapproved assets, credentials or the database itself.
+Approved public images, files, and preview media belong in `assets/`. See [assets/README.md](assets/README.md). Persistent browser uploads require a separately authenticated backend and object storage.
 
 ## Security
 
-See [SECURITY.md](SECURITY.md). This repo is deliberately separate from the private database. Public clients only access public API endpoints, without credentials.
+No credentials, SQLite runtime files, backend, database portals or draft/private records belong in this public repository. See [SECURITY.md](SECURITY.md).
 
 MIT licensed. © 2026 BareBones Projects.
