@@ -14,3 +14,8 @@ runtime/
 node_modules/
 _site/
 .DS_Store
+
+# Local intake staging must not be published
+incoming-md/
+review-staging/
+*.intake.zip
