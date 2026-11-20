@@ -15,9 +15,10 @@ jobs:
         with:
           node-version: '22'
       - run: node --test tests/*.test.mjs
-      - name: Check route and asset files
+      - name: Check public website structure
         run: |
-          for f in index.html fandom-db/index.html wiki-db/index.html alt-db/index.html scripts/portal.js styles.css assets/README.md; do test -f "$f" || exit 1; done
-      - name: Block private files
+          for f in index.html styles.css assets/README.md; do test -f "$f" || exit 1; done
+          for route in fandom-db wiki-db alt-db; do test ! -e "$route" || exit 1; done
+      - name: Block secrets and runtime data
         run: |
           if git ls-files | grep -E '(^|/)(\.env|.*\.sqlite3?|.*\.pem|.*\.key|runtime/)' ; then echo "Sensitive file name detected"; exit 1; fi
