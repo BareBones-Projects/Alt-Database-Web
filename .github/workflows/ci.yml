@@ -15,6 +15,8 @@ jobs:
         with:
           node-version: '22'
       - run: node --test tests/*.test.mjs
+      - name: Markdown intake classifier tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
       - name: Check public website structure
         run: |
           for f in index.html styles.css assets/README.md; do test -f "$f" || exit 1; done
