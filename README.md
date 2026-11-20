@@ -18,6 +18,10 @@ The following belong in the **ALT-Database-db** repository, not here:
 
 Their frontend route files and corresponding portal-only logic have been removed from this website repository. Links are documentation of **ownership**, not deployed routes.
 
+## Markdown upload and ChatGPT review
+
+Attach `.md` files here in ChatGPT for classification into **Fandom DB**, **Wiki DB** or **ALT DB**. Review the proposed destinations and open a draft PR against **ALT-Database-db** once authenticated GitHub access to that repository is available. This website does not host the uploaded content. See [Markdown intake guide](docs/MARKDOWN-INTAKE.md) and [`tools/sort_markdown.py`](tools/sort_markdown.py) for the local review manifest helper.
+
 ## Local development
 
 Run `python3 -m http.server 8080` from the repository root, then visit `http://localhost:8080/`. Run `node --test tests/*.test.mjs` with Node 20+.
